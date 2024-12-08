@@ -27,15 +27,16 @@
   "dependencies": {
     "@phosphor-icons/vue": "^2.2.1",
     "@vueuse/core": "^12.0.0",
+    "camera-controls": "^2.9.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "d3": "^7.9.0",
     "idb-keyval": "^6.2.1",
     "lodash-es": "^4.17.21",
     "notyf": "^3.10.0",
     "pinia": "^2.3.0",
     "radix-vue": "^1.9.11",
     "tailwind-merge": "^2.5.5",
+    "three": "^0.171.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   }
