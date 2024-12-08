@@ -1,7 +1,7 @@
 {
-  "name": "lgm",
+  "name": "pulsar",
   "version": "0.0.0",
-  "description": "Little green men.",
+  "description": "3D visualization of the famous LGM-1 pulsar.",
   "private": true,
   "type": "module",
   "scripts": {
