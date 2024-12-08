@@ -1,0 +1,41 @@
+{
+  "name": "lgm",
+  "version": "0.0.0",
+  "description": "Little green men.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "update": "npx npm-check-updates -u && npm i && npm audit fix",
+    "analyze": "npx vite-bundle-visualizer"
+  },
+  "prettier": {
+    "singleQuote": true
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vitejs/plugin-vue-jsx": "^4.1.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "prettier": "^3.4.2",
+    "sass": "^1.82.0",
+    "tailwindcss": "^3.4.16",
+    "tailwindcss-animate": "^1.0.7",
+    "vite": "^6.0.3"
+  },
+  "dependencies": {
+    "@phosphor-icons/vue": "^2.2.1",
+    "@vueuse/core": "^12.0.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "idb-keyval": "^6.2.1",
+    "lodash-es": "^4.17.21",
+    "notyf": "^3.10.0",
+    "pinia": "^2.3.0",
+    "radix-vue": "^1.9.11",
+    "tailwind-merge": "^2.5.5",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
+  }
+}
