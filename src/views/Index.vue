@@ -5,12 +5,14 @@
 <script setup>
 import pulsar from '@/assets/data/pulsar.json';
 import { Graphic } from '@/graphic/graphic';
+import { colors } from '@/utils/colors';
 import { useResizeObserver } from '@vueuse/core';
 import { merge } from 'lodash-es';
-import { BufferGeometry, Group, Line, LineBasicMaterial, Vector3 } from 'three';
+import { DoubleSide, Group, Mesh, MeshBasicMaterial, Shape, ShapeGeometry } from 'three';
 import { Line2 } from 'three/examples/jsm/lines/Line2';
 import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry';
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial';
+import { degToRad } from 'three/src/math/MathUtils';
 import { onBeforeUnmount, onMounted, useTemplateRef } from 'vue';
 
 class PulsarGraphic extends Graphic {
@@ -18,14 +20,23 @@ class PulsarGraphic extends Graphic {
     super(container, options);
   }
 
-  line(points, options = {}) {
-    options = merge({ color: 0xffffff }, options);
+  wave(data, options = {}) {
+    options = merge({ color: colors.shade1.int, linewidth: 2 }, options);
+
+    const shape = new Shape();
+    for (const [x, z] of data.entries()) {
+      if (x === 0) {
+        shape.moveTo(x, z);
+      } else {
+        shape.lineTo(x, z);
+      }
+    }
 
     const group = new Group();
     {
       const positions = [];
-      for (const point of points) {
-        positions.push(point.x, point.y, point.z);
+      for (const point of shape.getPoints()) {
+        positions.push(point.x, 0, point.y);
       }
 
       const geometry = new LineGeometry().setPositions(positions);
@@ -33,10 +44,14 @@ class PulsarGraphic extends Graphic {
       group.add(new Line2(geometry, material));
     }
     {
-      // Without this `fitAndCenter` doesn't work because `Line2` is implemented as a shader
-      const geometry = new BufferGeometry().setFromPoints(points);
-      const material = new LineBasicMaterial({ opacity: 0, transparent: true });
-      group.add(new Line(geometry, material));
+      shape.moveTo(data.length - 1, 0);
+      shape.moveTo(0, 0);
+      shape.closePath();
+
+      const geometry = new ShapeGeometry(shape);
+      geometry.rotateX(degToRad(90));
+      const material = new MeshBasicMaterial({ color: colors.shade8.int, side: DoubleSide });
+      group.add(new Mesh(geometry, material));
     }
     return group;
   }
@@ -44,19 +59,12 @@ class PulsarGraphic extends Graphic {
   paint() {
     this.clear();
 
-    for (const [i, data] of pulsar.entries()) {
-      const points = [];
-      for (const [j, value] of data.entries()) {
-        points.push(new Vector3(j - data.length / 2, 10 * (i - pulsar.length / 2), value));
-      }
-
-      const line = this.line(points, { linewidth: 2 });
-      this.scene.add(line);
+    for (const [y, data] of pulsar.entries()) {
+      const wave = this.wave(data);
+      wave.translateX(-data.length / 2);
+      wave.translateY(-10 * (y - pulsar.length / 2));
+      this.scene.add(wave);
     }
-  }
-
-  resetCamera() {
-    this.setCamera(new Vector3(0, -2000, 1000), new Vector3(0, 0, 1));
   }
 }
 

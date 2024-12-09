@@ -140,6 +140,6 @@ export class Graphic {
   }
 
   resetCamera() {
-    this.setCamera(new Vector3(-1000, -1000, 1000), new Vector3(0, 0, 1));
+    this.setCamera(new Vector3(0, -2000, 1000), new Vector3(0, 0, 1));
   }
 }

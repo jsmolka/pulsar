@@ -41,10 +41,10 @@ body,
 }
 
 body {
+  @apply bg-shade-8;
   @apply text-sm;
   @apply text-shade-2;
 
-  background: rgb(18, 18, 18);
   font-family: Inter, Roboto, ui-sans-serif, sans-serif;
 }
 
