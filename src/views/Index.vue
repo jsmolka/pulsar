@@ -6,48 +6,47 @@
 import pulsar from '@/assets/data/pulsar.json';
 import { Graphic } from '@/graphic/graphic';
 import * as THREE from '@/graphic/three';
-import { degToRad } from '@/graphic/three';
+import { degToRad, vec2, vec3 } from '@/graphic/three';
+import { useSettingsStore } from '@/stores/settings';
 import { colors } from '@/utils/colors';
 import { useResizeObserver } from '@vueuse/core';
-import { merge } from 'lodash-es';
+import { storeToRefs } from 'pinia';
 import { onBeforeUnmount, onMounted, useTemplateRef } from 'vue';
 
+const { settings } = storeToRefs(useSettingsStore());
+
 class PulsarGraphic extends Graphic {
-  wave(data, options = {}) {
-    options = merge({ color: colors.shade1.int, linewidth: 2 }, options);
-
-    const shape = new THREE.Shape();
-    for (const [x, z] of data.entries()) {
-      if (x === 0) {
-        shape.moveTo(x, z);
-      } else {
-        shape.lineTo(x, z);
-      }
-    }
-
+  wave(data) {
     const group = new THREE.Group();
-    {
-      const positions = [];
-      for (const point of shape.getPoints()) {
-        positions.push(point.x, 0, point.y);
-      }
+    const curve = new THREE.CatmullRomCurve3(data.map((z, x) => vec3(x, 0, z)));
+    const curvePoints = curve.getPoints((settings.value.interpolate + 1) * curve.points.length);
 
-      const geometry = new THREE.LineGeometry().setPositions(positions);
-      const material = new THREE.LineMaterial(options);
-      group.add(new THREE.Line2(geometry, material));
-    }
+    // Background
     {
-      shape.moveTo(data.length - 1, 0);
-      shape.moveTo(0, 0);
-      shape.closePath();
-
-      const geometry = new THREE.ShapeGeometry(shape);
+      const geometry = new THREE.ShapeGeometry(
+        new THREE.Shape(curvePoints.map((point) => vec2(point.x, point.z))),
+      );
       geometry.rotateX(degToRad(90));
       const material = new THREE.MeshBasicMaterial({
         color: colors.shade8.int,
         side: THREE.DoubleSide,
       });
       group.add(new THREE.Mesh(geometry, material));
+    }
+
+    // Curve
+    {
+      const positions = [];
+      for (const point of curvePoints) {
+        positions.push(point.x, point.y, point.z);
+      }
+
+      const geometry = new THREE.LineGeometry().setPositions(positions);
+      const material = new THREE.LineMaterial({
+        color: colors.shade1.int,
+        linewidth: settings.value.lineWidth,
+      });
+      group.add(new THREE.Line2(geometry, material));
     }
     return group;
   }
