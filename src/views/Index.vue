@@ -1,17 +1,80 @@
 <template>
   <div ref="container" class="h-full" />
+  <Toolbar class="fixed top-2 left-2">
+    <Button variant="ghost" size="icon" title="Reset view" @click="resetView">
+      <PhCube class="size-4" />
+    </Button>
+    <Dialog>
+      <DialogTrigger as-child>
+        <Button variant="ghost" size="icon" title="Settings">
+          <PhList class="size-4" />
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Settings</DialogTitle>
+          <DialogDescription v-show="false">Graphic settings</DialogDescription>
+        </DialogHeader>
+        <Form>
+          <FormItem>
+            <Label>Dataset</Label>
+            <InputNumber
+              :model-value="100 * settings.dataset"
+              @update:model-value="settings.dataset = $event / 100"
+              :min="1"
+              :max="100"
+              suffix=" %"
+            />
+          </FormItem>
+          <FormItem>
+            <Label>Interpolate</Label>
+            <InputNumber v-model="settings.interpolate" :min="0" />
+          </FormItem>
+          <FormItem>
+            <Label>Line width</Label>
+            <InputNumber v-model="settings.lineWidth" :min="1" />
+          </FormItem>
+          <FormItem>
+            <Label>Gap</Label>
+            <InputNumber v-model="settings.gap" :min="0" />
+          </FormItem>
+        </Form>
+        <DialogFooter>
+          <DialogClose as-child>
+            <Button variant="secondary">Close</Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  </Toolbar>
 </template>
 
 <script setup>
 import pulsar from '@/assets/data/pulsar.json';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Form, FormItem } from '@/components/ui/form';
+import { InputNumber } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Graphic } from '@/graphic/graphic';
 import * as THREE from '@/graphic/three';
 import { degToRad, vec2, vec3 } from '@/graphic/three';
 import { useSettingsStore } from '@/stores/settings';
 import { colors } from '@/utils/colors';
+import Toolbar from '@/views/Toolbar.vue';
+import { PhCube, PhList } from '@phosphor-icons/vue';
 import { useResizeObserver } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
-import { onBeforeUnmount, onMounted, useTemplateRef } from 'vue';
+import { onBeforeUnmount, onMounted, useTemplateRef, watch } from 'vue';
 
 const { settings } = storeToRefs(useSettingsStore());
 
@@ -31,7 +94,10 @@ class PulsarGraphic extends Graphic {
         color: colors.shade8.int,
         side: THREE.DoubleSide,
       });
-      group.add(new THREE.Mesh(geometry, material));
+
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.renderOrder = 1;
+      group.add(mesh);
     }
 
     // Curve
@@ -46,7 +112,10 @@ class PulsarGraphic extends Graphic {
         color: colors.shade1.int,
         linewidth: settings.value.lineWidth,
       });
-      group.add(new THREE.Line2(geometry, material));
+
+      const line = new THREE.Line2(geometry, material);
+      line.renderOrder = 0;
+      group.add(line);
     }
     return group;
   }
@@ -54,12 +123,15 @@ class PulsarGraphic extends Graphic {
   paint() {
     this.clear();
 
-    for (const [y, data] of pulsar.entries()) {
+    const dataset = pulsar.slice(0, Math.round(pulsar.length * settings.value.dataset));
+
+    for (const [y, data] of dataset.entries()) {
       const wave = this.wave(data);
       wave.translateX(-data.length / 2);
-      wave.translateY(-10 * (y - pulsar.length / 2));
+      wave.translateY(-settings.value.gap * (y - dataset.length / 2));
       this.scene.add(wave);
     }
+    this.render();
   }
 }
 
@@ -75,10 +147,23 @@ onMounted(() => {
   useResizeObserver(container, ([entry]) => {
     graphic.resize(entry.contentRect);
   });
+
+  watch(
+    settings,
+    () => {
+      graphic.paint();
+    },
+    { deep: true },
+  );
 });
 
 onBeforeUnmount(() => {
   graphic.dispose();
   graphic = null;
 });
+
+const resetView = () => {
+  graphic.resetCamera();
+  graphic.fitAndCenter();
+};
 </script>
