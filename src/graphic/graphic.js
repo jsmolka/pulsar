@@ -1,18 +1,13 @@
 import { CameraControls } from '@/graphic/cameraControls';
 import { CameraViewBox } from '@/graphic/cameraViewBox';
-import { dispose } from '@/graphic/dispose';
 import { Renderer } from '@/graphic/renderer.js';
+import * as THREE from '@/graphic/three';
+import { dispose, vec3 } from '@/graphic/three';
 import { merge } from 'lodash-es';
-import { Clock, PerspectiveCamera, Scene, Vector3 } from 'three';
 
 export class Graphic {
   constructor(container, options = {}) {
-    options = merge(
-      {
-        fitRatio: 1.05,
-      },
-      options,
-    );
+    options = merge({ fitRatio: 1.1 }, options);
 
     this.fitRatio = options.fitRatio;
     this.renderRaf = null;
@@ -38,11 +33,11 @@ export class Graphic {
   }
 
   initScene() {
-    this.scene = new Scene();
+    this.scene = new THREE.Scene();
   }
 
   initCamera() {
-    this.camera = new PerspectiveCamera();
+    this.camera = new THREE.PerspectiveCamera();
     Object.assign(this.camera, this.cameraFrustum);
     this.resetCamera();
   }
@@ -57,7 +52,7 @@ export class Graphic {
     this.controls.mouseButtons.middle = CameraControls.ACTION.DOLLY;
     this.controls.mouseButtons.right = CameraControls.ACTION.ROTATE;
 
-    const clock = new Clock();
+    const clock = new THREE.Clock();
     const update = () => {
       const updated = this.controls.update(clock.getDelta());
       if (updated) {
@@ -103,8 +98,7 @@ export class Graphic {
   }
 
   fitAndCenter() {
-    const target = new Vector3();
-
+    const target = vec3();
     const viewBox = new CameraViewBox();
     viewBox.setViewFromCamera(this.camera);
     viewBox.setFitRatio(this.fitRatio);
@@ -140,6 +134,6 @@ export class Graphic {
   }
 
   resetCamera() {
-    this.setCamera(new Vector3(0, -2000, 1000), new Vector3(0, 0, 1));
+    this.setCamera(vec3(0, -2000, 1000), vec3(0, 0, 1));
   }
 }

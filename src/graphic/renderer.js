@@ -1,13 +1,13 @@
+import * as THREE from '@/graphic/three';
 import { merge } from 'lodash-es';
-import { WebGLRenderer } from 'three';
 
-export class Renderer extends WebGLRenderer {
+export class Renderer extends THREE.WebGLRenderer {
   constructor(container, options = {}) {
     options = merge(
       {
         alpha: false,
         antialias: true,
-        logarithmicDepthBuffer: false,
+        logarithmicDepthBuffer: true,
         preserveDrawingBuffer: false,
         stencil: false,
       },

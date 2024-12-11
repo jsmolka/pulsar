@@ -1,5 +1,5 @@
+import * as THREE from '@/graphic/three';
 import CameraControls from 'camera-controls';
-import * as THREE from 'three';
 
 CameraControls.install({ THREE });
 
