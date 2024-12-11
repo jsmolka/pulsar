@@ -4,74 +4,27 @@
     <Button variant="ghost" size="icon" title="Reset view" @click="resetView">
       <PhCube class="size-4" />
     </Button>
-    <Dialog>
-      <DialogTrigger as-child>
+    <SettingsDialog>
+      <template #trigger>
         <Button variant="ghost" size="icon" title="Settings">
-          <PhList class="size-4" />
+          <PhGear class="size-4" />
         </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Settings</DialogTitle>
-          <DialogDescription v-show="false">Graphic settings</DialogDescription>
-        </DialogHeader>
-        <Form>
-          <FormItem>
-            <Label>Dataset</Label>
-            <InputNumber
-              :model-value="100 * settings.dataset"
-              @update:model-value="settings.dataset = $event / 100"
-              :min="1"
-              :max="100"
-              suffix=" %"
-            />
-          </FormItem>
-          <FormItem>
-            <Label>Interpolate</Label>
-            <InputNumber v-model="settings.interpolate" :min="0" />
-          </FormItem>
-          <FormItem>
-            <Label>Line width</Label>
-            <InputNumber v-model="settings.lineWidth" :min="1" />
-          </FormItem>
-          <FormItem>
-            <Label>Gap</Label>
-            <InputNumber v-model="settings.gap" :min="0" />
-          </FormItem>
-        </Form>
-        <DialogFooter>
-          <DialogClose as-child>
-            <Button variant="secondary">Close</Button>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      </template>
+    </SettingsDialog>
   </Toolbar>
 </template>
 
 <script setup>
 import pulsar from '@/assets/data/pulsar.json';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Form, FormItem } from '@/components/ui/form';
-import { InputNumber } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Graphic } from '@/graphic/graphic';
 import * as THREE from '@/graphic/three';
 import { degToRad, vec2, vec3 } from '@/graphic/three';
 import { useSettingsStore } from '@/stores/settings';
 import { colors } from '@/utils/colors';
+import SettingsDialog from '@/views/SettingsDialog.vue';
 import Toolbar from '@/views/Toolbar.vue';
-import { PhCube, PhList } from '@phosphor-icons/vue';
+import { PhCube, PhGear } from '@phosphor-icons/vue';
 import { useResizeObserver } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
 import { onBeforeUnmount, onMounted, useTemplateRef, watch } from 'vue';
