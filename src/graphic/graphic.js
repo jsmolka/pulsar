@@ -7,7 +7,7 @@ import { merge } from 'lodash-es';
 
 export class Graphic {
   constructor(container, options = {}) {
-    options = merge({ fitRatio: 1.1 }, options);
+    options = merge({ fitRatio: 1.05 }, options);
 
     this.fitRatio = options.fitRatio;
     this.renderRaf = null;
