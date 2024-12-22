@@ -1,6 +1,6 @@
 <template>
   <div ref="container" class="h-full" />
-  <Toolbar class="fixed top-2 left-2">
+  <Toolbar v-show="toolbar" class="fixed top-2 left-2">
     <Button variant="ghost" size="icon" title="Reset view" @click="resetView">
       <PhCube class="size-4" />
     </Button>
@@ -25,9 +25,15 @@ import { colors } from '@/utils/colors';
 import SettingsDialog from '@/views/SettingsDialog.vue';
 import Toolbar from '@/views/Toolbar.vue';
 import { PhCube, PhGear } from '@phosphor-icons/vue';
-import { useResizeObserver } from '@vueuse/core';
+import { useMagicKeys, useResizeObserver, whenever } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
-import { onBeforeUnmount, onMounted, useTemplateRef, watch } from 'vue';
+import { onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
+
+const toolbar = ref(true);
+const { h } = useMagicKeys();
+whenever(h, () => {
+  toolbar.value = !toolbar.value;
+});
 
 const { settings } = storeToRefs(useSettingsStore());
 
