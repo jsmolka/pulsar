@@ -32,42 +32,59 @@ import { onBeforeUnmount, onMounted, useTemplateRef, watch } from 'vue';
 const { settings } = storeToRefs(useSettingsStore());
 
 class PulsarGraphic extends Graphic {
+  curve(data) {
+    if (settings.value.interpolate === 0) {
+      const points = data.map((y, x) => vec2(x, y));
+      return new THREE.Path3d(points);
+    }
+    if (settings.value.interpolate > 0) {
+      const points = data.map((y, x) => vec3(x, y, 0));
+      return new THREE.CatmullRomCurve3(points);
+    }
+    if (settings.value.interpolate < 0) {
+      let points = data.map((y, x) => vec2(x, y));
+      points = points.filter((_, index) => index % Math.abs(settings.value.interpolate) === 0);
+      return new THREE.Path3d(points);
+    }
+    return new THREE.Path3d();
+  }
+
   wave(data) {
     const group = new THREE.Group();
-    const curve = new THREE.CatmullRomCurve3(data.map((z, x) => vec3(x, 0, z)));
-    const curvePoints = curve.getPoints((settings.value.interpolate + 1) * curve.points.length);
+    const curve = this.curve(data);
 
     // Background
     {
       const geometry = new THREE.ShapeGeometry(
-        new THREE.Shape(curvePoints.map((point) => vec2(point.x, point.z))),
+        new THREE.Shape(curve.getPoints(settings.value.curveSteps)),
       );
       geometry.rotateX(degToRad(90));
       const material = new THREE.MeshBasicMaterial({
         color: colors.shade8.int,
         side: THREE.DoubleSide,
       });
-
       const mesh = new THREE.Mesh(geometry, material);
-      mesh.renderOrder = 1;
       group.add(mesh);
     }
 
     // Curve
     {
-      const positions = [];
-      for (const point of curvePoints) {
-        positions.push(point.x, point.y, point.z);
-      }
+      const circle = new THREE.Shape();
+      circle.moveTo(settings.value.lineWidth / 2, 0);
+      circle.absarc(0, 0, settings.value.lineWidth / 2, 0, degToRad(360), false);
 
-      const geometry = new THREE.LineGeometry().setPositions(positions);
-      const material = new THREE.LineMaterial({
+      const geometry = new THREE.ExtrudeGeometry(circle, {
+        steps: settings.value.curveSteps,
+        extrudePath: curve,
+        curveSegments: settings.value.curveSegments,
+        bevelEnabled: false,
+      });
+      geometry.rotateX(degToRad(90));
+      const material = new THREE.MeshBasicMaterial({
         color: colors.shade1.int,
-        linewidth: settings.value.lineWidth,
       });
 
-      const line = new THREE.Line2(geometry, material);
-      line.renderOrder = 0;
+      const line = new THREE.Mesh(geometry, material);
       group.add(line);
     }
     return group;

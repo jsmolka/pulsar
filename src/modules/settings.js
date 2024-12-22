@@ -6,12 +6,16 @@ export class Settings {
     this.lineWidth = 1;
     this.gap = 5;
     this.interpolate = 0;
+    this.curveSteps = 300;
+    this.curveSegments = 12;
   }
 }
 
 defineSchema(Settings, {
   dataset: primitive(),
   lineWidth: primitive(),
+  curveSteps: primitive(),
+  curveSegments: primitive(),
   gap: primitive(),
   interpolate: primitive(),
 });

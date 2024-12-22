@@ -1,10 +1,17 @@
-import { Vector2, Vector3 } from 'three';
+import { Path, Vector2, Vector3 } from 'three';
 
 export * from 'three';
 export { Line2 } from 'three/examples/jsm/lines/Line2';
 export { LineGeometry } from 'three/examples/jsm/lines/LineGeometry';
 export { LineMaterial } from 'three/examples/jsm/lines/LineMaterial';
 export { degToRad, radToDeg } from 'three/src/math/MathUtils';
+
+export class Path3d extends Path {
+  getPoint(t, optionalTarget) {
+    const point = super.getPoint(t, optionalTarget);
+    return point != null ? new Vector3(point.x, point.y, 0) : null;
+  }
+}
 
 export function vec2(x = 0, y = 0) {
   return new Vector2(x, y);

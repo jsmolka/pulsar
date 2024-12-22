@@ -23,15 +23,19 @@
         </FormItem>
         <FormItem>
           <Label>Interpolate</Label>
-          <InputNumber v-model="settings.interpolate" :min="0" />
+          <InputNumber v-model="settings.interpolate" />
         </FormItem>
         <FormItem>
           <Label>Line width</Label>
-          <InputNumber v-model="settings.lineWidth" :min="1" />
+          <InputNumber v-model="settings.lineWidth" :min="0.1" :precision="2" />
         </FormItem>
         <FormItem>
           <Label>Gap</Label>
           <InputNumber v-model="settings.gap" :min="0" />
+        </FormItem>
+        <FormItem>
+          <Label>Curve steps</Label>
+          <InputNumber v-model="settings.curveSteps" :min="1" />
         </FormItem>
       </Form>
       <DialogFooter>
