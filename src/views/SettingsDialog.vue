@@ -33,10 +33,6 @@
           <Label>Gap</Label>
           <InputNumber v-model="settings.gap" :min="0" />
         </FormItem>
-        <FormItem>
-          <Label>Curve steps</Label>
-          <InputNumber v-model="settings.curveSteps" :min="1" />
-        </FormItem>
       </Form>
       <DialogFooter>
         <DialogClose as-child>
