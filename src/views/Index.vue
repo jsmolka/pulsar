@@ -52,7 +52,10 @@ class PulsarGraphic extends Graphic {
 
     // Background
     {
-      const geometry = new THREE.ShapeGeometry(new THREE.Shape(points));
+      const min = Math.min(...data);
+      const geometry = new THREE.ShapeGeometry(
+        new THREE.Shape([vec3(0, min, 0), ...points, vec3(data.length, min, 0)]),
+      );
       geometry.rotateX(degToRad(90));
 
       group.add(
