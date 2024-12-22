@@ -62,11 +62,7 @@ class PulsarGraphic extends Graphic {
 
     // Curve
     {
-      const positions = [];
-      for (const point of points) {
-        positions.push(point.x, point.y, point.z);
-      }
-      const geometry = new THREE.LineGeometry().setPositions(positions);
+      const geometry = new THREE.LineGeometry().setFromPoints(points);
       geometry.rotateX(degToRad(90));
 
       group.add(
