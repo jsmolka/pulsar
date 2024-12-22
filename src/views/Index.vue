@@ -41,7 +41,7 @@ class PulsarGraphic extends Graphic {
   wave(data) {
     const group = new THREE.Group();
 
-    let points = data.map((y, x) => vec3(x, y, 0));
+    let points = data.map((y, x) => vec3(x, settings.value.amplitude * y, 0));
     if (settings.value.interpolate > 0) {
       const curve = new THREE.CatmullRomCurve3(points);
       points = curve.getPoints(settings.value.interpolate * points.length);
@@ -88,8 +88,7 @@ class PulsarGraphic extends Graphic {
   paint() {
     this.clear();
 
-    const dataset = pulsar.slice(0, Math.round(pulsar.length * settings.value.dataset));
-
+    const dataset = pulsar.slice(0, settings.value.lines);
     for (const [y, data] of dataset.entries()) {
       const wave = this.wave(data);
       wave.translateX(-data.length / 2);

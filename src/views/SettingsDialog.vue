@@ -12,18 +12,16 @@
       </DialogHeader>
       <Form>
         <FormItem>
-          <Label>Dataset</Label>
-          <InputNumber
-            :model-value="100 * settings.dataset"
-            @update:model-value="settings.dataset = $event / 100"
-            :min="1"
-            :max="100"
-            suffix=" %"
-          />
+          <Label>Lines</Label>
+          <InputNumber v-model="settings.lines" :min="1" :max="pulsar.length" />
         </FormItem>
         <FormItem>
           <Label>Interpolate</Label>
           <InputNumber v-model="settings.interpolate" />
+        </FormItem>
+        <FormItem>
+          <Label>Amplitude</Label>
+          <InputNumber v-model="settings.amplitude" :min="0.1" :precision="2" />
         </FormItem>
         <FormItem>
           <Label>Line width</Label>
@@ -44,6 +42,7 @@
 </template>
 
 <script setup>
+import pulsar from '@/assets/data/pulsar.json';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
