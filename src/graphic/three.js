@@ -7,9 +7,13 @@ export { LineMaterial } from 'three/examples/jsm/lines/LineMaterial';
 export { degToRad, radToDeg } from 'three/src/math/MathUtils';
 
 export class Path3d extends Path {
-  getPoint(t, optionalTarget) {
+  getPoint(t, optionalTarget, z = 0) {
     const point = super.getPoint(t, optionalTarget);
-    return point != null ? new Vector3(point.x, point.y, 0) : null;
+    return point != null ? new Vector3(point.x, point.y, z) : null;
+  }
+
+  getPoints(divisions, z = 0) {
+    return super.getPoints(divisions).map(({ x, y }) => new Vector3(x, y, z));
   }
 }
 
