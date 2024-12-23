@@ -91,13 +91,14 @@ class PulsarGraphic extends Graphic {
   paint() {
     this.clear();
 
-    const dataset = pulsar.slice(0, settings.value.lines);
+    const dataset = pulsar.slice(-settings.value.lines);
     for (const [y, data] of dataset.entries()) {
       const wave = this.wave(data);
       wave.translateX(-data.length / 2);
       wave.translateY(-settings.value.gap * (y - dataset.length / 2));
       this.scene.add(wave);
     }
+
     this.render();
   }
 }
