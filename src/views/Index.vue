@@ -40,6 +40,7 @@ const { settings } = storeToRefs(useSettingsStore());
 class PulsarGraphic extends Graphic {
   initScene() {
     super.initScene();
+
     this.scene.background = new THREE.Color(colors.shade8.int);
   }
 
@@ -109,14 +110,14 @@ class PulsarGraphic extends Graphic {
   paint() {
     this.clear();
 
-    this.ssaaPass.sampleLevel = settings.value.sampleRate;
+    this.ssaaPass.sampleLevel = settings.value.samples;
     this.filmPass.uniforms.intensity.value = settings.value.filmGrain;
 
     const dataset = pulsar.slice(-settings.value.lines);
     for (const [y, data] of dataset.entries()) {
       const wave = this.wave(data);
       wave.translateX(-data.length / 2);
-      wave.translateY(-settings.value.gap * (y - dataset.length / 2));
+      wave.translateY(-settings.value.lineGap * (y - dataset.length / 2));
       this.scene.add(wave);
     }
 

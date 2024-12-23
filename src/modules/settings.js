@@ -6,10 +6,10 @@ export class Settings {
     this.lines = pulsar.length;
     this.interpolate = 0;
     this.amplitude = 1;
-    this.lineWidth = 1;
-    this.gap = 8;
-    this.sampleRate = 8;
-    this.filmGrain = 0;
+    this.lineWidth = 0.5;
+    this.lineGap = 8;
+    this.samples = 8;
+    this.filmGrain = 1;
   }
 }
 
@@ -18,6 +18,7 @@ defineSchema(Settings, {
   interpolate: primitive(),
   amplitude: primitive(),
   lineWidth: primitive(),
-  sampleRate: primitive(),
+  lineGap: primitive(),
+  samples: primitive(),
   filmGrain: primitive(),
 });

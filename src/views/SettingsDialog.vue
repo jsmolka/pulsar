@@ -28,12 +28,12 @@
           <InputNumber v-model="settings.lineWidth" :min="0.1" :precision="2" />
         </FormItem>
         <FormItem>
-          <Label>Gap</Label>
-          <InputNumber v-model="settings.gap" :min="0" />
+          <Label>Line gap</Label>
+          <InputNumber v-model="settings.lineGap" :min="0" />
         </FormItem>
         <FormItem>
-          <Label>Sample rate</Label>
-          <InputNumber v-model="settings.sampleRate" :min="0" />
+          <Label>SSAA samples</Label>
+          <InputNumber v-model="settings.samples" :min="0" />
         </FormItem>
         <FormItem>
           <Label>Film grain</Label>
