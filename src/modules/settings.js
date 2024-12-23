@@ -7,8 +7,8 @@ export class Settings {
     this.interpolate = 0;
     this.amplitude = 1;
     this.lineWidth = 1;
-    this.gap = 10;
-    this.sampleRate = 4;
+    this.gap = 8;
+    this.sampleRate = 8;
     this.filmGrain = 0;
   }
 }
