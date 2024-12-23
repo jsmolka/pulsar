@@ -17,6 +17,7 @@ export class Graphic {
     this.initScene();
     this.initCamera();
     this.initCameraControls();
+    this.initEffectComposer();
   }
 
   get cameraFrustum() {
@@ -64,6 +65,12 @@ export class Graphic {
     update();
   }
 
+  initEffectComposer() {
+    this.composer = new THREE.EffectComposer(this.renderer);
+    this.composer.setPixelRatio(this.renderer.getPixelRatio());
+    this.composer.addPass(new THREE.RenderPass(this.scene, this.camera));
+  }
+
   dispose() {
     window.cancelAnimationFrame(this.renderRaf);
     window.cancelAnimationFrame(this.cameraControlsRaf);
@@ -84,11 +91,14 @@ export class Graphic {
   }
 
   forceRender() {
-    this.renderer.render(this.scene, this.camera);
+    this.composer.render();
   }
 
   resize(rect = null) {
-    this.renderer.resize(rect);
+    const w = Math.floor(rect?.width ?? this.renderer.width);
+    const h = Math.floor(rect?.height ?? this.renderer.height);
+    this.renderer.setSize(w, h);
+    this.composer.setSize(w, h);
 
     Object.assign(this.camera, this.cameraFrustum);
     this.camera.updateProjectionMatrix();

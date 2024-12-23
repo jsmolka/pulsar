@@ -19,9 +19,9 @@ export class Renderer extends THREE.WebGLRenderer {
     this.domElement.style.outline = 'none';
     this.domElement.tabIndex = 0;
 
+    this.setSize(this.width, this.height);
     this.setPixelRatio(window.devicePixelRatio);
     this.setClearColor(0xffffff, 0);
-    this.resize();
   }
 
   get container() {
@@ -34,11 +34,5 @@ export class Renderer extends THREE.WebGLRenderer {
 
   get height() {
     return this.container.clientHeight;
-  }
-
-  resize(rect = null) {
-    const w = Math.floor(rect?.width ?? this.width);
-    const h = Math.floor(rect?.height ?? this.height);
-    this.setSize(w, h);
   }
 }
