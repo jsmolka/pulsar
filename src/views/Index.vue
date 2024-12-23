@@ -38,6 +38,11 @@ whenever(h, () => {
 const { settings } = storeToRefs(useSettingsStore());
 
 class PulsarGraphic extends Graphic {
+  initScene() {
+    super.initScene();
+    this.scene.background = new THREE.Color(colors.shade8.int);
+  }
+
   initEffects() {
     this.ssaaPass = new THREE.SSAARenderPass(this.scene, this.camera);
     this.ssaaPass.sampleLevel = 0;
