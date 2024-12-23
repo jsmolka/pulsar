@@ -35,6 +35,10 @@
           <Label>Sample rate</Label>
           <InputNumber v-model="settings.sampleRate" :min="0" />
         </FormItem>
+        <FormItem>
+          <Label>Film grain</Label>
+          <InputNumber v-model="settings.filmGrain" :min="0" :precision="2" />
+        </FormItem>
       </Form>
       <DialogFooter>
         <DialogClose as-child>

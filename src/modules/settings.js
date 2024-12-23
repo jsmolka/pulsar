@@ -9,6 +9,7 @@ export class Settings {
     this.lineWidth = 1;
     this.gap = 10;
     this.sampleRate = 4;
+    this.filmGrain = 0;
   }
 }
 
@@ -18,4 +19,5 @@ defineSchema(Settings, {
   amplitude: primitive(),
   lineWidth: primitive(),
   sampleRate: primitive(),
+  filmGrain: primitive(),
 });

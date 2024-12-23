@@ -47,8 +47,12 @@ class PulsarGraphic extends Graphic {
     this.ssaaPass = new THREE.SSAARenderPass(this.scene, this.camera);
     this.ssaaPass.sampleLevel = 0;
 
+    this.filmPass = new THREE.FilmPass();
+    this.filmPass.uniforms.intensity.value = 0;
+
     this.composer.addPass(new THREE.RenderPass(this.scene, this.camera));
     this.composer.addPass(this.ssaaPass);
+    this.composer.addPass(this.filmPass);
     this.composer.addPass(new THREE.OutputPass());
   }
 
@@ -106,6 +110,7 @@ class PulsarGraphic extends Graphic {
     this.clear();
 
     this.ssaaPass.sampleLevel = settings.value.sampleRate;
+    this.filmPass.uniforms.intensity.value = settings.value.filmGrain;
 
     const dataset = pulsar.slice(-settings.value.lines);
     for (const [y, data] of dataset.entries()) {

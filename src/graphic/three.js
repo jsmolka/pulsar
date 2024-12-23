@@ -5,6 +5,7 @@ export { Line2 } from 'three/examples/jsm/lines/Line2';
 export { LineGeometry } from 'three/examples/jsm/lines/LineGeometry';
 export { LineMaterial } from 'three/examples/jsm/lines/LineMaterial';
 export { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
+export { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass';
 export { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass';
 export { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 export { SSAARenderPass } from 'three/examples/jsm/postprocessing/SSAARenderPass';
