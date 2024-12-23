@@ -6,7 +6,7 @@ export class Renderer extends THREE.WebGLRenderer {
     options = merge(
       {
         alpha: false,
-        antialias: true,
+        antialias: false,
         logarithmicDepthBuffer: true,
         preserveDrawingBuffer: false,
         stencil: false,
