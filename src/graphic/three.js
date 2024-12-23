@@ -5,7 +5,9 @@ export { Line2 } from 'three/examples/jsm/lines/Line2';
 export { LineGeometry } from 'three/examples/jsm/lines/LineGeometry';
 export { LineMaterial } from 'three/examples/jsm/lines/LineMaterial';
 export { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
+export { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass';
 export { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
+export { SSAARenderPass } from 'three/examples/jsm/postprocessing/SSAARenderPass';
 export { degToRad, radToDeg } from 'three/src/math/MathUtils';
 
 export function vec2(x = 0, y = 0) {

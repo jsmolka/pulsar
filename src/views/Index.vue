@@ -38,6 +38,15 @@ whenever(h, () => {
 const { settings } = storeToRefs(useSettingsStore());
 
 class PulsarGraphic extends Graphic {
+  initEffects() {
+    this.ssaaPass = new THREE.SSAARenderPass(this.scene, this.camera);
+    this.ssaaPass.sampleLevel = 0;
+
+    this.composer.addPass(new THREE.RenderPass(this.scene, this.camera));
+    this.composer.addPass(this.ssaaPass);
+    this.composer.addPass(new THREE.OutputPass());
+  }
+
   wave(data) {
     const group = new THREE.Group();
 
@@ -90,6 +99,8 @@ class PulsarGraphic extends Graphic {
 
   paint() {
     this.clear();
+
+    this.ssaaPass.sampleLevel = settings.value.sampleRate;
 
     const dataset = pulsar.slice(-settings.value.lines);
     for (const [y, data] of dataset.entries()) {

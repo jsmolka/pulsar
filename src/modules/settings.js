@@ -8,6 +8,7 @@ export class Settings {
     this.amplitude = 1;
     this.lineWidth = 1;
     this.gap = 10;
+    this.sampleRate = 4;
   }
 }
 
@@ -16,5 +17,5 @@ defineSchema(Settings, {
   interpolate: primitive(),
   amplitude: primitive(),
   lineWidth: primitive(),
-  gap: primitive(),
+  sampleRate: primitive(),
 });

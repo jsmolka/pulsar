@@ -31,6 +31,10 @@
           <Label>Gap</Label>
           <InputNumber v-model="settings.gap" :min="0" />
         </FormItem>
+        <FormItem>
+          <Label>Sample rate</Label>
+          <InputNumber v-model="settings.sampleRate" :min="0" />
+        </FormItem>
       </Form>
       <DialogFooter>
         <DialogClose as-child>

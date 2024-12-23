@@ -18,6 +18,7 @@ export class Graphic {
     this.initCamera();
     this.initCameraControls();
     this.initEffectComposer();
+    this.initEffects();
   }
 
   get cameraFrustum() {
@@ -68,7 +69,11 @@ export class Graphic {
   initEffectComposer() {
     this.composer = new THREE.EffectComposer(this.renderer);
     this.composer.setPixelRatio(this.renderer.getPixelRatio());
+  }
+
+  initEffects() {
     this.composer.addPass(new THREE.RenderPass(this.scene, this.camera));
+    this.composer.addPass(new THREE.OutputPass());
   }
 
   dispose() {
