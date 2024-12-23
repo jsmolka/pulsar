@@ -79,6 +79,7 @@ export class Graphic {
   dispose() {
     window.cancelAnimationFrame(this.renderRaf);
     window.cancelAnimationFrame(this.cameraControlsRaf);
+    this.composer.dispose();
     this.renderer.dispose();
     this.controls.dispose();
     this.clear();
